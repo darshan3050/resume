@@ -4,7 +4,7 @@ export const profile = {
   tagline: "Full-Stack Engineer building scalable web platforms, AI-driven tools, and microservices.",
   email: "darshannaik376@gmail.com",
   phone: "+91 9822331094",
-  linkedin: "https://linkedin.com/in/darshan-naik",
+  linkedin: "https://www.linkedin.com/in/darshan-naik124/",
   github: "https://github.com/darshan3050",
   location: "Mumbai, India",
 };
