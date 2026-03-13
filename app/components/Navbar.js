@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { profile } from "../data/resume";
 
 const links = [
   { label: "About", href: "#hero" },
@@ -49,6 +50,15 @@ export default function Navbar() {
           ))}
           <li>
             <a
+              href={profile.resume}
+              download
+              className="text-sm text-gray-400 hover:text-white transition-colors duration-200"
+            >
+              Download Resume
+            </a>
+          </li>
+          <li>
+            <a
               href="#contact"
               className="text-sm px-4 py-2 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white transition-colors duration-200"
             >
@@ -90,6 +100,16 @@ export default function Navbar() {
                 </a>
               </li>
             ))}
+            <li>
+              <a
+                href={profile.resume}
+                download
+                onClick={() => setMenuOpen(false)}
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                Download Resume
+              </a>
+            </li>
           </ul>
         </div>
       )}

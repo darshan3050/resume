@@ -99,8 +99,15 @@ export default function Hero() {
           style={{ animationDelay: "0.4s" }}
         >
           <a
-            href="#experience"
+            href={profile.resume}
+            download
             className="px-7 py-3 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold transition-all duration-200 hover:shadow-lg hover:shadow-indigo-500/30"
+          >
+            Download Resume
+          </a>
+          <a
+            href="#experience"
+            className="px-7 py-3 rounded-full border border-white/10 hover:border-white/30 text-gray-300 hover:text-white font-semibold transition-all duration-200"
           >
             View My Work
           </a>

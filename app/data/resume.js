@@ -2,6 +2,7 @@ export const profile = {
   name: "Darshan Naik",
   title: "Senior Software Engineer",
   tagline: "Full-Stack Engineer building scalable web platforms, AI-driven tools, and microservices.",
+  resume: "/Darshan-Naik-Resume.pdf",
   email: "darshannaik376@gmail.com",
   phone: "+91 9822331094",
   linkedin: "https://www.linkedin.com/in/darshan-naik124/",
