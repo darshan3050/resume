@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import { profile } from "../data/resume";
 
 const contactItems = [
@@ -46,69 +46,132 @@ const contactItems = [
 ];
 
 export default function Contact() {
-  const sectionRef = useRef(null);
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.1,
+      },
+    },
+  };
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.target.classList.toggle("visible", e.isIntersecting)),
-      { threshold: 0.1 }
-    );
-    const els = sectionRef.current?.querySelectorAll(".section-fade");
-    els?.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+  };
 
   return (
-    <section id="contact" ref={sectionRef} className="py-24 px-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Banner */}
-        <div className="section-fade relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 via-indigo-500 to-purple-600 p-12 text-center mb-16">
-          <div className="absolute inset-0 opacity-20"
+    <section id="contact" className="py-28 px-6 relative overflow-hidden">
+      {/* Ambient glows */}
+      <div className="absolute bottom-1/2 left-0 w-[600px] h-[400px] bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/4 right-0 w-[500px] h-[400px] bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="max-w-6xl mx-auto relative z-10">
+        {/* Premium banner */}
+        <motion.div
+          className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 via-indigo-500 to-purple-600 p-16 text-center mb-20 border border-indigo-400/30"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+        >
+          {/* Grid overlay */}
+          <div className="absolute inset-0 opacity-10"
             style={{
               backgroundImage: "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
-              backgroundSize: "40px 40px",
+              backgroundSize: "50px 50px",
             }}
           />
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+
           <div className="relative z-10">
-            <h2 className="text-4xl font-bold text-white mb-4">Let's Work Together</h2>
-            <p className="text-indigo-100 text-lg max-w-xl mx-auto mb-8">
-              Open to full-time roles, freelance projects, and exciting collaborations.
-            </p>
-            <a
-              href={`mailto:${profile.email}`}
-              className="inline-block bg-white text-indigo-600 font-semibold px-8 py-3 rounded-full hover:bg-indigo-50 transition-colors duration-200 shadow-lg"
+            <motion.h2
+              className="text-5xl sm:text-6xl font-extrabold text-white mb-6 leading-tight"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ delay: 0.1 }}
             >
-              Say Hello 👋
-            </a>
+              Let's Build Something Great
+            </motion.h2>
+            <motion.p
+              className="text-indigo-100 text-lg sm:text-xl max-w-2xl mx-auto mb-10 font-light tracking-wide"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ delay: 0.2 }}
+            >
+              I'm available for full-time roles, exciting projects, and creative collaborations. Let's connect!
+            </motion.p>
+            <motion.a
+              href={`mailto:${profile.email}`}
+              className="inline-block btn btn-primary"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ delay: 0.3 }}
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Send Me a Message
+            </motion.a>
           </div>
-        </div>
+        </motion.div>
 
         {/* Contact cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={containerVariants}
+        >
           {contactItems.map((item, i) => (
-            <a
+            <motion.a
               key={item.label}
               href={item.href}
               target={item.href.startsWith("http") ? "_blank" : undefined}
               rel="noopener noreferrer"
-              className="section-fade card-hover bg-white/[0.03] border border-white/[0.07] rounded-2xl p-5 flex flex-col gap-3 hover:border-indigo-500/30 group"
-              style={{ transitionDelay: `${i * 60}ms` }}
+              className="card group p-7 flex flex-col gap-4 hover:border-indigo-400/50"
+              variants={itemVariants}
+              whileHover={{
+                y: -8,
+              }}
             >
-              <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 group-hover:bg-indigo-500/20 transition-colors">
+              <motion.div
+                className="w-12 h-12 rounded-lg bg-gradient-to-br from-indigo-600/30 to-purple-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 group-hover:border-indigo-400/60 transition-colors"
+                whileHover={{ rotate: 15, scale: 1.15 }}
+              >
                 {item.icon}
-              </div>
+              </motion.div>
               <div>
-                <p className="text-gray-500 text-xs uppercase tracking-widest">{item.label}</p>
-                <p className="text-white text-sm font-medium mt-0.5 truncate">{item.value}</p>
+                <p className="text-indigo-300 text-xs uppercase tracking-widest font-semibold">{item.label}</p>
+                <p className="text-white text-sm font-medium mt-2 truncate">{item.value}</p>
               </div>
-            </a>
+            </motion.a>
           ))}
-        </div>
+        </motion.div>
 
-        {/* Footer */}
-        <div className="section-fade text-center mt-16 text-gray-600 text-sm">
-          <p>© 2025 Darshan Naik · Built with Next.js & Tailwind CSS</p>
-        </div>
+        {/* Premium footer */}
+        <motion.div
+          className="text-center mt-20 pt-12 border-t border-indigo-500/20"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ delay: 0.5 }}
+        >
+          <p className="text-gray-500 text-sm tracking-wide">© 2025 Darshan Naik · Crafted with <span className="text-indigo-400">Next.js</span> & <span className="text-indigo-400">Framer Motion</span></p>
+        </motion.div>
       </div>
     </section>
   );

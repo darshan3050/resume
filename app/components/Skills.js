@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { skills } from "../data/resume";
 
 const categoryMeta = {
@@ -66,15 +67,39 @@ export default function Skills() {
   const sectionRef = useRef(null);
   const [hoveredCard, setHoveredCard] = useState(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.target.classList.toggle("visible", e.isIntersecting)),
-      { threshold: 0.1 }
-    );
-    const els = sectionRef.current?.querySelectorAll(".section-fade");
-    els?.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const badgeVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.3,
+      },
+    },
+  };
 
   return (
     <section id="skills" ref={sectionRef} className="py-28 px-6 relative overflow-hidden">
@@ -83,7 +108,13 @@ export default function Skills() {
 
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Heading */}
-        <div className="section-fade text-center mb-20">
+        <motion.div
+          className="text-center mb-20"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5 }}
+        >
           <p className="text-indigo-400 text-sm font-semibold uppercase tracking-[0.3em] mb-3">
             What I Work With
           </p>
@@ -91,24 +122,34 @@ export default function Skills() {
           <p className="text-gray-500 mt-4 text-lg max-w-xl mx-auto">
             A toolkit built over years of shipping production-grade software.
           </p>
-        </div>
+        </motion.div>
 
         {/* Cards grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={containerVariants}
+        >
           {skills.map((group, i) => {
             const meta = categoryMeta[group.category] ?? fallbackMeta;
             const isHovered = hoveredCard === group.category;
 
             return (
-              <div
+              <motion.div
                 key={group.category}
-                className={`section-fade relative rounded-2xl border border-white/[0.08] bg-white/[0.03] p-7 cursor-default transition-all duration-300 overflow-hidden ${meta.border}`}
+                className={`relative rounded-2xl border border-white/[0.08] bg-white/[0.03] p-7 cursor-default transition-all duration-300 overflow-hidden ${meta.border}`}
                 style={{
-                  transitionDelay: `${i * 80}ms`,
                   boxShadow: isHovered ? `0 0 40px ${meta.glow}` : "none",
                 }}
                 onMouseEnter={() => setHoveredCard(group.category)}
                 onMouseLeave={() => setHoveredCard(null)}
+                variants={itemVariants}
+                whileHover={{
+                  y: -5,
+                  transition: { duration: 0.2 },
+                }}
               >
                 {/* Gradient top bar */}
                 <div className={`absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r ${meta.gradient} rounded-t-2xl`} />
@@ -124,11 +165,13 @@ export default function Skills() {
 
                 {/* Header */}
                 <div className="relative flex items-center gap-4 mb-6">
-                  <div
+                  <motion.div
                     className={`w-12 h-12 rounded-xl bg-gradient-to-br ${meta.gradient} flex items-center justify-center text-xl shadow-lg shrink-0`}
+                    whileHover={{ rotate: 10, scale: 1.1 }}
+                    transition={{ type: "spring", stiffness: 400 }}
                   >
                     {meta.icon}
-                  </div>
+                  </motion.div>
                   <div>
                     <h3 className="text-lg font-bold text-white leading-tight">{group.category}</h3>
                     <span className={`text-xs font-medium px-2 py-0.5 rounded-full mt-1 inline-block ${meta.pill}`}>
@@ -139,19 +182,25 @@ export default function Skills() {
 
                 {/* Skill badges */}
                 <div className="relative flex flex-wrap gap-2">
-                  {group.items.map((skill) => (
-                    <span
+                  {group.items.map((skill, idx) => (
+                    <motion.span
                       key={skill}
                       className={`text-sm font-medium px-3 py-1.5 rounded-full border transition-all duration-200 ${meta.badge}`}
+                      variants={badgeVariants}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true }}
+                      transition={{ delay: idx * 0.05 }}
+                      whileHover={{ scale: 1.05 }}
                     >
                       {skill}
-                    </span>
+                    </motion.span>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

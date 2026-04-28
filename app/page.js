@@ -7,7 +7,7 @@ import Contact from "./components/Contact";
 
 export default function Portfolio() {
   return (
-    <main className="bg-[#0d0d0f] text-white">
+    <main className="bg-gradient-to-br from-[#0a0a0f] via-[#0d0d0f] to-[#0a0a0f] text-white overflow-hidden">
       <Navbar />
       <Hero />
       <Skills />
